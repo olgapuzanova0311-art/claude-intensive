@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Оплата прошла успешно</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, system-ui, sans-serif;
+    background: #F2EDE4;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    background: #FDFAF6; border: 1px solid #DDD5C8; border-radius: 20px;
+    padding: 40px 32px; max-width: 420px; text-align: center;
+  }
+  .icon { font-size: 48px; margin-bottom: 16px; }
+  h1 { font-size: 22px; color: #1A1612; margin-bottom: 12px; }
+  p { font-size: 15px; color: #6B6159; line-height: 1.6; margin-bottom: 28px; }
+  .btn {
+    display: inline-block; background: #DA7756; color: #fff;
+    font-size: 16px; font-weight: 600; padding: 14px 32px;
+    border-radius: 12px; text-decoration: none;
+  }
+  .hint { font-size: 13px; color: #9C8F84; margin-top: 16px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🎉</div>
+    <h1>Оплата прошла успешно!</h1>
+    <p>Нажми кнопку ниже — вернёшься в Telegram-бот, и доступ к ВИП-каналам откроется автоматически.</p>
+    <a href="#" id="bot-btn" class="btn">Открыть бота →</a>
+    <div class="hint">Если кнопка не сработала, перейди вручную: @claude_puzanova_bot</div>
+  </div>
+
+  <script>
+    // Получаем tg_id из URL (его передал бот при формировании ссылки оплаты:
+    // ?tg_id=123456789). GetCourse должен сохранить и вернуть этот параметр
+    // на странице "Спасибо за покупку", если он передаётся через сквозные
+    // параметры заказа. Если GetCourse не пробрасывает параметр автоматически,
+    // его нужно подставить в настройках самой страницы благодарности.
+    var params = new URLSearchParams(window.location.search);
+    var tgId = params.get('tg_id') || params.get('uid') || '';
+
+    var botLink = tgId
+      ? 'https://t.me/claude_puzanova_bot?start=paid_' + tgId
+      : 'https://t.me/claude_puzanova_bot';
+
+    document.getElementById('bot-btn').href = botLink;
+
+    // Автоматический переход через 1.5 секунды, если человек не нажмёт сам
+    setTimeout(function () {
+      window.location.href = botLink;
+    }, 1500);
+  </script>
+</body>
+</html>
